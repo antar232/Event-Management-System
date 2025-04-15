@@ -1,0 +1,99 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        UserManager userManager = new UserManager();
+        EventManager eventManager = new EventManager();
+        User loggedInUser = null;
+
+        int choice;
+
+        do {
+            System.out.println("===== Event Management System =====");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            if (loggedInUser != null) {
+                System.out.println("3. Add Event");
+                System.out.println("4. View Events");
+                System.out.println("5. Search Event");
+                System.out.println("6. Logout");
+            }
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Choose a username: ");
+                    String newUsername = scanner.nextLine();
+                    System.out.print("Choose a password: ");
+                    String newPassword = scanner.nextLine();
+                    if (userManager.register(newUsername, newPassword)) {
+                        System.out.println("Registration successful!\n");
+                    } else {
+                        System.out.println("Username already taken.\n");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter username: ");
+                    String username = scanner.nextLine();
+                    System.out.print("Enter password: ");
+                    String password = scanner.nextLine();
+                    User user = userManager.login(username, password);
+                    if (user != null) {
+                        loggedInUser = user;
+                        System.out.println("Login successful!\n");
+                    } else {
+                        System.out.println("Invalid credentials.\n");
+                    }
+                    break;
+
+                case 3:
+                    if (loggedInUser != null) {
+                        System.out.print("Enter event name: ");
+                        String name = scanner.nextLine();
+                        System.out.print("Enter date (dd-mm-yyyy): ");
+                        String date = scanner.nextLine();
+                        System.out.print("Enter location: ");
+                        String location = scanner.nextLine();
+                        eventManager.addEvent(name, date, location);
+                    }
+                    break;
+
+                case 4:
+                    if (loggedInUser != null) {
+                        eventManager.viewAllEvents();
+                    }
+                    break;
+
+                case 5:
+                    if (loggedInUser != null) {
+                        System.out.print("Enter event name to search: ");
+                        String searchName = scanner.nextLine();
+                        eventManager.searchEvent(searchName);
+                    }
+                    break;
+
+                case 6:
+                    if (loggedInUser != null) {
+                        loggedInUser = null;
+                        System.out.println("Logged out successfully.\n");
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Exiting...");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice.\n");
+            }
+
+        } while (choice != 0);
+
+        scanner.close();
+    }
+}

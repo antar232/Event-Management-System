@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class EventManager {
+    private List<Event> eventList;
+
+    public EventManager() {
+        eventList = new ArrayList<>();
+    }
+
+    public void addEvent(String name, String date, String location) {
+        Event event = new Event(name, date, location);
+        eventList.add(event);
+        System.out.println("Event added successfully.\n");
+    }
+
+    public void viewAllEvents() {
+        if (eventList.isEmpty()) {
+            System.out.println("No events found.\n");
+            return;
+        }
+        for (Event e : eventList) {
+            e.displayEvent();
+        }
+    }
+
+    public void searchEvent(String name) {
+        boolean found = false;
+        for (Event e : eventList) {
+            if (e.getName().equalsIgnoreCase(name)) {
+                System.out.println("Event found:");
+                e.displayEvent();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Event not found.\n");
+        }
+    }
+}
